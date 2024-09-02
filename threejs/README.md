@@ -24,3 +24,32 @@ Three中的相机有两种，分别是正投影相机THREE.OrthographicCamera和
 
 # Object3D
 ## Mesh
+
+三维模型用三角形组成的网格来描述，我们把这种模型称之为Mesh模型。
+
+    Mesh( geometry, material ) //geometry是它的形状，material是它的材质。
+
+## Geometry
+
+形状，过存储模型用到的点集和点间关系(哪些点构成一个三角形)来达到描述物体形状的目的。
+
+Three提供了立方体(其实是长方体)、平面(其实是长方形)、球体、圆形、圆柱、圆台等许多基本形状；
+
+## Material
+
+材质，物体表面除了形状以为所有可视属性的集合，例如色彩、纹理、光滑度、透明度、反射率、折射率、发光度。
+
+## Points
+
+一堆点的集合
+
+## light
+
+光影效果是让画面丰富的重要因素。Three提供了包括环境光AmbientLight、点光源PointLight、 聚光灯SpotLight、方向光DirectionalLight、半球光HemisphereLight等多种光源。
+
+## Renderer
+
+Renderer绑定一个canvas对象，并可以设置大小，默认背景颜色等属性。
+
+调用Renderer的render函数，传入scene和camera，就可以把图像渲染到canvas中了。
+
