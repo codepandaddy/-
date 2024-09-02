@@ -1,4 +1,4 @@
-组件化应用构建
+# 组件化应用构建
 
 -     <div id="app">
           <todo-item></todo-item>
