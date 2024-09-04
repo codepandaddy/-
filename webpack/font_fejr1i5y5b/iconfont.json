@@ -1,0 +1,37 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "36204161",
+      "name": "Cancel2",
+      "font_class": "Cancel2",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "36204162",
+      "name": "Cancel",
+      "font_class": "Cancel",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
+      "icon_id": "36204163",
+      "name": "icon-kfckfc",
+      "font_class": "a-Checkboxoutlineblank",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "36204164",
+      "name": "Camera alt",
+      "font_class": "a-Cameraalt",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    }
+  ]
+}

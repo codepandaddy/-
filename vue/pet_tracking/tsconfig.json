@@ -1,0 +1,59 @@
+{
+  // "module": "esnext",
+  "compilerOptions": {
+    // 目标代码(ts -> js(es5/6/7))
+    "target": "ESNext",
+    // three JSX modes: preserve, react, and react-native
+    // 在preserve模式下生成代码中会保留JSX以供后续的转换操作使用（比如：Babel）。 另外，输出文件会带有.jsx扩展名。 react模式会生成React.createElement，在使用前不需要再进行转换操作了，输出文件的扩展名为.js。 react-native相当于preserve，它也保留了所有的JSX，但是输出文件的扩展名是.js。
+    "jsx": "preserve",
+    // 指定一组描述目标运行时环境的捆绑库声明文件。
+    "lib": ["ESNext", "DOM"],
+    // class 字段定义
+    "useDefineForClassFields": true,
+    // 指定基本目录来解析裸说明符模块名称
+    "baseUrl": ".",
+    // 目标代码需要使用的模块化方案(commonjs：require、module.exports  es module：import、export)
+    // 如果设置为umd就是支持多种模块化
+    "module": "ESNext",
+    // 指定 TypeScript 如何从给定的模块说明符查找文件
+    "moduleResolution": "Node",
+    "paths": {
+      "@/*": ["src/*"],
+      "#/*": ["types/*"]
+    },
+    // 允许用import导入json文件作为模块使用
+    "resolveJsonModule": true,
+    // node_modules/@types任何封闭文件夹中的包都被视为可见
+    "typeRoots": ["./node_modules/@types/", "./types"],
+    // 只有列出的包才会包含在全局范围内
+    "types": ["vite/client"],
+    "strict": true,
+    // 发出错误any
+    "noImplicitAny": false,
+    // 要不要生成映射文件(ts -> js)
+    "sourceMap": true,
+    // 自动生成模块的默认导出
+    "allowSyntheticDefaultImports": true,
+    // es module 和 commonjs能不能混合来使用,下面俩属性一般是一起的
+    // export default/module.exports = {}
+    "esModuleInterop": true,
+    // 没有import或export的问题https://blog.csdn.net/weixin_40013817/article/details/127125777，ts 提供了 import type or export type
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "components.d.ts",
+    "types/**/*.d.ts",
+    "types/**/*.ts",
+    "build/**/*.ts",
+    "build/**/*.d.ts",
+    "mock/**/*.ts",
+    "vite.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.js"]
+  // tsconfig.json文件 compilerOptions 常用配置 https://juejin.cn/post/7091530360114118670
+  // tsconfig 常用配置解析 https://segmentfault.com/a/1190000021421461
+}

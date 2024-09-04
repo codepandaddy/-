@@ -1,0 +1,88 @@
+Arguments: 
+  E:\nodejs\node.exe C:\Users\Zxy.Vivi\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add -D eslint-webpack-plugin
+
+PATH: 
+  E:\Oracle\WINDOWS.X64_193000_db_home\bin;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;"%M2_HOME%\bin;";E:\Java\jdk1.8.0_301\bin;E:\Java\jdk1.8.0_301\jre\bin;D:\software\apache-maven-3.8.6\bin;D:\maven\apache-maven-3.6.3\bin;E:\nodejs\;C:\Program Files\TortoiseSVN\bin;E:\mysql-8.0.27-winx64\bin;E:\gradle-6.4\bin;E:\android\androidSDK\platform-tools;E:\android\androidSDK\tools;C:\Users\Zxy.Vivi\AppData\Roaming\npm\node_modules;E:\Git\cmd;C:\Users\Zxy.Vivi\AppData\Local\Microsoft\WindowsApps;;D:\PyCharm Community Edition 2021.3.3\bin;;C:\Users\Zxy.Vivi\AppData\Roaming\npm;E:\Microsoft VS Code\bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.18.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: http://123.232.10.234:8212/nexus/content/groups/npm-public/eslint-webpack-plugin/-/eslint-webpack-plugin-4.0.1.tgz: Request failed "404 Not Found"
+      at ResponseError.ExtendableBuiltin (C:\Users\Zxy.Vivi\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:696:66)
+      at new ResponseError (C:\Users\Zxy.Vivi\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:802:124)
+      at Request.<anonymous> (C:\Users\Zxy.Vivi\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66215:16)
+      at Request.emit (node:events:513:28)
+      at Request.module.exports.Request.onRequestResponse (C:\Users\Zxy.Vivi\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141767:10)
+      at ClientRequest.emit (node:events:513:28)
+      at HTTPParser.parserOnIncomingClient (node:_http_client:693:27)
+      at HTTPParser.parserOnHeadersComplete (node:_http_common:128:17)
+      at HTTPParser.execute (<anonymous>)
+      at Socket.socketOnData (node:_http_client:534:22)
+
+npm manifest: 
+  {
+    "name": "webpack_test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "css-loader": "^6.8.1",
+      "file-loader": "^6.2.0",
+      "html-loader": "^4.2.0",
+      "html-withimg-loader": "^0.1.16",
+      "jquery": "^3.7.0",
+      "less-loader": "^11.1.3",
+      "style-loader": "^3.3.3",
+      "url-loader": "^4.1.1"
+    },
+    "browserslist": {
+      "development": [
+        "last 1 chrome version",
+        "last 1 firefox version",
+        "last 1 safari version"
+      ],
+      "production": [
+        ">0.2%",
+        "not dead",
+        "not op_mini all"
+      ]
+    },
+    "devDependencies": {
+      "eslint": "^8.44.0",
+      "eslint-config-airbnb-base": "^15.0.0",
+      "eslint-loader": "^4.0.2",
+      "eslint-plugin-import": "^2.27.5",
+      "html-webpack-plugin": "^5.5.3",
+      "mini-css-extract-plugin": "^2.7.6",
+      "optimize-css-assets-webpack-plugin": "^6.0.1",
+      "postcss-loader": "^7.3.3",
+      "postcss-preset-env": "^9.0.0",
+      "webpack": "^5.88.1",
+      "webpack-cli": "^5.1.4",
+      "webpack-dev-server": "^4.15.1"
+    },
+    "eslintConfig": {
+      "extends": "airbnb-base",
+      "env": {
+        "browser": true
+      }
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="get">get</button>
+  <button id="post">post</button>
+
+  <script>
+    $(function () {
+      $('#get').on('click', function () {
+        $.ajax({
+          type: 'GET',
+          url: 'http://localhost/api/get',
+          data: { name: 'zs', age: 20 },
+          success: function (res) {
+            console.log(res);
+          }
+        })
+      })
+
+      $('#post').on('click', function () {
+        $.ajax({
+          type: 'POST',
+          url: 'http://localhost/api/post',
+          data: { name: '1111', age: 20 },
+          success: function (res) {
+            console.log(res);
+          }
+        })
+      })
+    })
+  </script>
+</body>
+</html>
