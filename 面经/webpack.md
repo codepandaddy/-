@@ -283,7 +283,7 @@ vue init webpack <Project Name>
     }
     ```
 
-- 在build/vue-loader.config.js中，是vue-loader的一些配置
+- 在build/vue-loader.config.js中，是vue-loader的一些配置，将vue文件转换为js模块
 
   - ```js
     'use strict'
@@ -838,6 +838,17 @@ vue init webpack <Project Name>
       "start": "npm run dev",
       "build": "node build/build.js"
     },
-  ```
+    ```
+# 与vite对比
 
-- ​
+- Webpack 会遍历你的应用程序中的所有文件，并启动一个开发服务器，然后将整个代码渲染到开发环境中。
+  - webpack 从一个 entry.js 文件开始，将其依赖的所有 js 或者其他 assets 通过 loader 打包成一个文件， 随后这个打包后的文件将被从 server 传递到客户端浏览器运行。
+  - 因为这样的处理规则，当保存文件时，整个 JavaScript 包将由 Webpack 重新构建，这就是为什么更改可能需要长达 10 秒才能反映在浏览器中，更新速度会随着应用体积增长而直线下降。
+- Vite 的工作方式不同，它不会遍历整个应用程序，Vite 只是转换当时正在使用的文件/模块。
+  - Vite 的核心理念：非捆绑开发构建，浏览器请求它时，使用 ES 模块转换并提供一段应用程序代码。
+  - 开始开发构建时，Vite 首先将 JavaScript 模块分为两类：**依赖**模块和**源码**模块。
+  - 依赖项模块是第三方依赖的代码，从 node_modules 文件夹中导入的 JavaScript 模块。这些模块将使用 esbuild 进行处理和捆绑，**esbuild** 是一个用 Go 编写的 JavaScript 打包工具，执行速度比 Webpack 快 10-100 倍。
+  - 源码模块是源代码，即业务代码，通常涉及特定库的扩展，如：.jsx、.vue、.scss 文件。
+  - 它使用基于路由的代码拆分来了解代码的哪些部分实际需要加载，因此，它不必重新打包所有内容。
+  - 它还使用现代浏览器中的原生 ES 模块支持来交付代码，这让浏览器可以在开发中承担打包工作。
+  - 在生产方面，虽然现在所有主流浏览器都支持原生 ES 模块，但它实现了诸如 tree-shaking、延迟加载和通用块拆分等性能优化技术，仍然比非打包应用程序带来更好的整体性能。出于这个原因，Vite 附带了一个预先配置的 build 命令，该命令使用 **Rollup** 打包来打包和实现各种性能优化。
