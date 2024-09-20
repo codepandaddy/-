@@ -30,13 +30,21 @@
 
 ## vue-cli和webpack安装
 
-- 一般就是全局安装，不需要重新安装了
-
 ## 搭建项目
 
 vue init webpack <Project Name>
 
+## 配置代理服务器
 
+## 创建入口文件
+
+## 创建系统入口页面
+
+## 配置store
+
+## 配置router
+
+## 配置api
 
 # 项目实践（过程）
 
@@ -852,3 +860,56 @@ vue init webpack <Project Name>
   - 它使用基于路由的代码拆分来了解代码的哪些部分实际需要加载，因此，它不必重新打包所有内容。
   - 它还使用现代浏览器中的原生 ES 模块支持来交付代码，这让浏览器可以在开发中承担打包工作。
   - 在生产方面，虽然现在所有主流浏览器都支持原生 ES 模块，但它实现了诸如 tree-shaking、延迟加载和通用块拆分等性能优化技术，仍然比非打包应用程序带来更好的整体性能。出于这个原因，Vite 附带了一个预先配置的 build 命令，该命令使用 **Rollup** 打包来打包和实现各种性能优化。
+- 他们都支持热更新但方式不同，vite用es模块的动态导入和原生hmr api实现，而webpack则通过内置的hmr插件实现
+
+# bundle和bundless区别
+
+- bundle指的是将多个模块打包成一个或多个文件的过程，比如webpack
+- bundless强调无需打包整个应用，按需加载部分，比如vite通过原生esm实现
+  - 可以减少不必要的加载和构建时间
+
+# commonjs（cjs）和es modules（esm）区别
+
+```js
+// commonjs.js
+ 
+// 导入模块
+const add = require('./math');
+ 
+// 使用模块中的函数
+console.log(add(5, 3)); // 输出：8
+
+// math.js
+ 
+// 定义函数
+const add = (a, b) => {
+  return a + b;
+};
+ 
+// 导出函数
+module.exports = add;
+```
+
+```js
+// esmodules.mjs
+ 
+// 导入模块
+import { add } from './math.mjs';
+ 
+// 使用模块中的函数
+console.log(add(5, 3)); // 输出：8
+
+// math.mjs
+ 
+// 定义函数
+export const add = (a, b) => {
+  return a + b;
+};
+```
+
+# 大型项目上vite和webpack
+
+- vite会勉励挑战，如依赖分析和构建优化不如webpack成熟
+- 但vite快速启动还是有优势
+- webpack有更丰富的插件生态和强大的配置能力，在处理大型项目时更加灵活
+- ​

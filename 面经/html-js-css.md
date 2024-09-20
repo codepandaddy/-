@@ -1,5 +1,3 @@
-
-
 # websocket
 
 - 是与服务器的全双工、双向通信，不使用http，二是自定义协议，目的是更快地发送小数据块，长连接，有状态的连接，第一次握手即可建立持久性链接
@@ -183,3 +181,291 @@
   - 前者没有自己的arguments，super、new.target也没有
   - 箭头函数不支持重命名函数参数，普通函数的函数参数支持重命名
   - 语法更简洁清晰
+
+# 防抖节流
+
+## 防抖debounce
+
+- 应用场景
+
+  - 点击按钮事件，用户在一定时间段内的点击事件，为了防止和服务端的多次交互，我们可以采用防抖。
+  - 输入框的自动保存事件
+  - 浏览器的`resize`事件
+
+- 概念：触发高频事件后n秒内函数只会执行一次，如果n秒内高频事件再次被触发，则重新计算时间
+
+- ```js
+  function debounce(fun,wait){
+      let timer;
+      return (...args)=>{
+      	if (timer){
+          	clearTimeout(timer);
+          }
+          timer = setTimeout(()=>{
+          	fun(...args);
+          },wait)
+      }
+  }
+  window.onresize = debounce(()=>{
+  	console.log(1);
+  },1000);
+  //页面在频繁resize的时候，控制台也只会打印一次1
+
+  ```
+
+## 节流throttle
+
+- 减少流量，高频事件触发，但在n秒内只会执行一次。即，控制事件触发的频率
+
+- `scroll`事件，滚动的过程中每隔一段时间触发事件
+
+- ```js
+  //利用时间间隔实现
+  function throttle1(fun,wait){
+  	let time1 = 0;
+  	return (...args)=>{
+     		const time2 = Date.now()
+          const timeInterval = time2 - time1;
+   		if ( timeInterval < wait){
+   			return 
+   		}else {
+  			time1 = time2;
+              fun(...args);
+  		}
+      }
+  }
+  window.onresize = throttle1(()=>{
+  	console.log(1);
+  },1000);
+  //页面在频繁resize的时候，控制台会每隔1秒打印一次
+
+  //利用定时器实现
+  function throttle2(fun,wait){
+  	let timer;
+  	return (...args)=>{
+  		if (timer){
+  			return
+  		}else {
+  			timer = setTimeout(()=>{
+  				timer = null;
+  				fun(...args);
+  			},wait);
+  		}
+  	}
+  }
+  window.onresize = throttle2(()=>{
+  	console.log(1);
+  },1000);
+  //页面在频繁resize的时候，控制台会每隔1秒打印一次
+
+  ```
+
+# 如何实现图片懒加载
+
+- 判断可见区域，监听window.scroll事件，通过clientTop、offsetTop、clientHeight、scrollTop各种关于图片的高度作对比
+
+- 控制图片加载，监听window.scroll事件中，当满足条件时动态设置img标签的src就行
+
+- 优化
+
+  - **判断可见区域**，Element.getBoundingClientRect()能快速返回元素的大小及其相对于视口的位置
+
+  - ```js
+    console.log(document.body.getBoundingClientRect()); 
+    //DOMRect {
+    //  bottom: 0
+    //  height: 0
+    //  left: 0
+    //  right: 1920
+    //  top: 0
+    //  width: 1920
+    //  x: 0
+    //  y: 0
+    //}
+
+    ```
+
+  - 优化window.scroll监听，添加节流器，使用lodash库的lodash.throttle
+
+  - 综合上面两个优化，出现了第三个事件IntersectionObserver API，一个能够监听元素是否到了当前视口的事件
+
+  - ```js
+    const observer = new IntersectionObserver((changes)=>{
+      // changes: 目标元素集合
+      changes.forEach((change) => {
+        // 可见
+        if (change.isIntersecting) {
+          const img = change.target
+          img.src = img.dataset.src
+          observer.unobserve(img)
+        }
+      })
+    })
+    observer.observe(img)
+
+    ```
+
+  - 最终优化是添加loading属性，<img src="XXX.jpg" loading="lazy">但仅兼容chrome
+
+# 实现拖拽功能
+
+- 实现一个基本的拖拽功能通常涉及监听元素的mousedown、mousemove和mouseup事件
+
+- ‌**鼠标按下时**‌：识别选中的页面元素，记录元素的起始点（横纵坐标）。
+
+- ‌**鼠标移动时**‌：将被移动元素进行绝对定位到目前鼠标移至的相对位置上。
+
+- ‌**鼠标弹起时**‌：通过位置计算出目标元素的位置，将起始位置元素与目标位置元素互换。
+
+- 优化：**requestAnimationFrame**
+
+  - 定时循环操作的接口，类似setTimeout，用于按帧对网页进行重绘，让个网页动画效果有一个统一的刷新机制
+
+  - ```js
+    const test = document.querySelector<HTMLDivElement>("#test")!;
+    let i = 0;
+    let requestId: number;
+    function animation() {
+      test.style.marginLeft = `${i}px`;
+      requestId = requestAnimationFrame(animation);
+      i++;
+      if (i > 200) {
+        cancelAnimationFrame(requestId);
+      }
+    }
+    animation();
+    ```
+
+  - setTimeout会比它更快，原因是浏览器的渲染机制，会在必要时渲染，页面改变菜渲染，需要考虑到硬件的刷新频率限制、页面性能等。setTimeout就是一直在回调，回调完几次后才渲染，requestAnimationFrame只会在每次渲染之前调用，所以看上去setTimeout更快
+
+
+# promise解决地狱回调
+
+- 通过链式调用.then()来避免，将所有方法变成异步方法，return promise，实现扁平化
+
+- ```js
+  function doSomething() {
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+              resolve('Result from doSomething');
+          }, 1000);
+      });
+  }
+
+  function doSomethingElse(result) {
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+              resolve(result + ' -> Result from doSomethingElse');
+          }, 1000);
+      });
+  }
+
+  function doAnotherThing(result) {
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+              resolve(result + ' -> Result from doAnotherThing');
+          }, 1000);
+      });
+  }
+
+  function doFinalThing(result) {
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+              resolve(result + ' -> Result from doFinalThing');
+          }, 1000);
+      });
+  }
+  // 扁平化
+  doSomething()
+      .then(result1 => {
+          console.log(result1);
+          return doSomethingElse(result1);
+      })
+      .then(result2 => {
+          console.log(result2);
+          return doAnotherThing(result2);
+      })
+      .then(result3 => {
+          console.log(result3);
+          return doFinalThing(result3);
+      })
+      .then(result4 => {
+          console.log(result4);
+      })
+      .catch(error => {
+          console.error(error);
+      });
+
+  ```
+
+# css兼容性
+
+## 不同浏览器的标签默认的内外边距不同
+
+- 不加样式控制，各自的margin和padding差异较大
+- 最常见最易解决的问题*{margin:0;padding:0;}
+
+## 块属性标签float后，margin不同使之换行
+
+- 比较常见，可在float标签样式控制中，添加display:inline，将其转化为行内属性
+- 最常见的div+css布局，float横向布局，用margin实现间距就会有问题、
+
+## 设置较小高度标签（<10px），却超出高度
+
+- ie6、7和遨游浏览器中常见，超出自己设置的高度
+- 给超出高度的标签设置overflow:hidden;
+- 或者设置行高line-height小于你设置的高度
+- 这种会出现在小圆角背景的标签里，出现这个问题是ie8之前的浏览器都会给标签一个最小默认的行高的高度，及时是空的高度也是默认高度
+
+## 透明度兼容的css
+
+```css
+.transparent_class {  
+      filter:alpha(opacity=50);  
+      -moz-opacity:0.5;  
+      -khtml-opacity: 0.5;  
+      opacity: 0.5;  
+}
+```
+
+## 鼠标指针
+
+- cursor:hand只在ie识别
+- 建议只用cursor：pointer
+
+# 实现 dom 循环完之后回调
+
+- 在JavaScript中，实现DOM循环之后的回调，通常可以使用`Promise`结合`async/await`或者传统的回调函数。以下是使用`Promise`和`async/await`的示例代码：
+
+- ```js
+  // 使用Promise和async/await
+  function loopDomElements(selector, callback) {
+    return new Promise((resolve) => {
+      const elements = document.querySelectorAll(selector);
+      let i = 0;
+      const next = () => {
+        if (i < elements.length) {
+          callback(elements[i], i);
+          i++;
+          setTimeout(next, 0); // 模拟异步操作
+        } else {
+          resolve(); // 所有循环都完成后，调用resolve
+        }
+      };
+      next(); // 开始循环
+    });
+  }
+   
+  // 使用函数
+  async function processDomElements() {
+    await loopDomElements('.some-class', (element, index) => {
+      // 对每个元素执行的操作
+      console.log(`Processing element ${index}:`, element);
+    });
+    console.log('All DOM elements have been processed.');
+  }
+   
+  processDomElements(); // 调用函数开始处理DOM元素
+  ```
+
+- ​
