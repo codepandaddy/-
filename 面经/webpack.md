@@ -912,4 +912,56 @@ export const add = (a, b) => {
 - vite会勉励挑战，如依赖分析和构建优化不如webpack成熟
 - 但vite快速启动还是有优势
 - webpack有更丰富的插件生态和强大的配置能力，在处理大型项目时更加灵活
-- ​
+
+# tree-shaking实现原理
+
+## 什么是tree-shaking
+
+- 是一种基于 ES Module 规范的 Dead Code Elimination 技术
+- 它会在运行过程中静态分析模块之间的导入导出，确定 ESM 模块中哪些导出值未曾其它模块使用，并将其删除，以此实现打包产物的优化
+
+## 在 Webpack 中启动 Tree Shaking
+
+- 在 Webpack 中，启动 Tree Shaking 功能必须同时满足三个条件：
+
+  - 使用 ESM 规范编写模块代码
+  - 配置 `optimization.usedExports` 为 `true`，启动标记功能
+  - 启动代码优化功能，可以通过如下方式实现：
+    - 配置 `mode = production`
+    - 配置 `optimization.minimize = true`
+    - 提供 `optimization.minimizer` 数组
+
+- ```js
+  // webpack.config.js
+  module.exports = {
+    entry: "./src/index",
+    mode: "production",
+    devtool: false,
+    optimization: {
+      usedExports: true,
+    },
+  };
+
+  ```
+
+## 理论基础
+
+- 在 CommonJs、AMD、CMD 等旧版本的 JavaScript 模块化方案中，导入导出行为是高度动态，难以预测的
+
+- ```js
+  if(process.env.NODE_ENV === 'development'){
+    require('./bar');
+    exports.foo = 'foo';
+  }
+  ```
+
+- 而 ESM 方案则从规范层面规避这一行为，它要求所有的导入导出语句只能出现在模块顶层，且导入导出的模块名必须为字符串常量
+
+- 所以，ESM 下模块之间的依赖关系是高度确定的，与运行状态无关，编译工具只需要对 ESM 模块做静态分析，就可以从代码字面量中推断出哪些模块值未曾被其它模块使用
+
+## 实现原理
+
+- Webpack 中，Tree-shaking 的实现一是先**标记**出模块导出值中哪些没有被用过，二是使用 Terser 删掉这些没被用到的导出语句。标记过程大致可划分为三个步骤：
+  - Make 阶段，收集模块导出变量并记录到模块依赖关系图 ModuleGraph 变量中
+  - Seal 阶段，遍历 ModuleGraph 标记模块导出变量有没有被使用
+  - 生成产物时，若变量没有被其它模块使用则删除对应的导出语句
