@@ -566,3 +566,69 @@
 - 如果出现乱码问题，比如+转换为空格或其他乱码现象，可以用
   - URLEncoder.encode(value,'utf-8')加密
   - URLEncoder.decode(value,'utf-8')解密
+
+# null和undefined的区别
+
+- `null`是一个表示"无"的对象, `Number(null) === 0 `，undefined是一个表示"无"的原始值，`Number(undefined) === NaN`
+- `null`表示一个值被定义了, 但是这个值是空值
+  - 作为函数的参数, 表示函数的参数不是对象
+  - 作为对象原型链的终点`Object.getPrototypeOf(Object.prototype)`
+- `undefined`表示不存在该值的定义
+  - 变量被声明了还没有赋值, 表现为`undefined`
+  - 调用函数时应该提供的参数没有提供, 参数值表现为`undefined`
+  - 对象没有赋值的属性, 该属性的值表现为`undefined`
+  - 函数没有返回值, 默认返回`undefined`
+- null == undefined但null !== undefinded
+
+# 行内元素和块级元素如何区别
+
+- 行内：只占据它对应标签的边框所包含的空间
+- 块级：占据其父元素（容器）整个空间，因此创建了一个块
+- 区别：
+  - 行内元素不会新起一行，块级元素会新起一行
+  - 块级元素可以设置 width, height属性，注意：块级元素即使设置了宽度，仍然是独占一行的。而行内元素设置width, height无效。
+  - 块级元素可以设置margin 和 padding。行内元素的水平方向有效，竖直方向无效
+  - 块级元素可以包含行内元素和块级元素。行内元素不能包含块级元素
+  - 设置居中
+    - 行内：`text-align:center`是当外层是div时，设置div；垂直居中`height:30px;line-height:30px  `
+    - 块级：`margin:0 auto; width:500px;  `要设置父容器宽度；垂直居中`margin:0 auto;height:30px;line-height:30px`
+
+## 什么是物理像素，逻辑像素和像素密度，为什么在移动端开发时需要用到@3x, @2x 这种图片？
+
+- 以 `iPhone XS` 为例，当写 CSS 代码时，针对于单位 `px`，其宽度为 414px & 896px，也就是说当赋予一个 div 元素宽度为 414px，这个 div 就会填满手机的宽度；
+
+- 而如果有一把尺子来实际测量这部手机的`物理像素`，实际为 1242*2688 物理像素；经过计算可知，1242/414=3，也就是说，在单边上，一个`逻辑像素` = 3 个物理像素，就说这个屏幕的像素密度为 3，也就是常说的 3 倍屏。
+
+- 对于图片来说，为了保证其不`失真`，1 个图片像素至少要对应一个物理像素，假如原始图片是 `500*300` 像素，那么在 3 倍屏上就要放一个 `1500*900` 像素的图片才能保证 1 个物理像素至少对应一个图片像素，才能不失真。
+
+- 当然，也可以针对所有屏幕，都只提供最高清图片。虽然`低密度`屏幕用不到那么多图片像素，而且会因为下载多余的像素造成`带宽浪费`和`下载延迟`，但从结果上说能保证图片在所有屏幕上都不会失真。
+
+- 还可以使用 CSS 媒体查询来判断不同的像素密度，从而选择不同的图片:
+
+- ```css
+  my-image { background: (low.png); }
+  @media only screen and (min-device-pixel-ratio: 1.5) {
+    #my-image { background: (high.png); }
+  }
+  ```
+
+
+# js原始值类型（基本数据类型）
+
+- string、number、boolean、undefined、symbol、null
+
+- ```js
+  console.log(typeof null) // object
+  console.log(typeof undefined) // undefined
+  console.log(typeof true) // boolean
+  console.log(typeof 1) // number
+  console.log(typeof '123') // string
+  console.log(typeof 1111n) // bigint
+  console.log(typeof Symbol()) // symbol
+  ```
+
+- null 返回的类型是 object，这是历史原因造成的。以后估计也不会改了。要测试null，不能使用typeof，需要用`===null`来测试。
+
+- Symbol没有字面量写法，也不能用new创建。
+
+- bigint后缀是n
